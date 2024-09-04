@@ -85,4 +85,26 @@
 		WHERE member_name = #{memberName}
 		AND member_email = #{memberEmail}
 	</select>
+	
+	<select id="selectMemberCertification" parameterType="java.util.HashMap" resultType="int">
+		SELECT member_idx
+		FROM tb_member
+		WHERE member_id = #{memberId}
+		AND member_name = #{memberName}
+		AND member_email = #{memberEmail}
+	</select>
+	
+	<select id="selectMemberCertificationChk" parameterType="java.util.HashMap" resultType="int">
+		SELECT count(member_idx)
+		FROM tb_member
+		WHERE member_id = #{memberId}
+		AND member_name = #{memberName}
+		AND member_email = #{memberEmail}
+	</select>
+	
+	<update id="updatePwd" parameterType="java.util.HashMap">
+		UPDATE tb_member
+		SET member_pw = #{memberPw}
+		WHERE member_idx = #{memberIdx}
+	</update>
 </mapper>

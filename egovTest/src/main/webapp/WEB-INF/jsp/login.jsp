@@ -48,6 +48,13 @@
 		frm.attr("action", "/findIdView.do");
 		frm.submit();
 	}
+	
+	function fn_findPwView(){
+		var frm = $("#frm");
+		frm.attr("method", "POST");
+		frm.attr("action", "/findPwView.do");
+		frm.submit();
+	}
 </script>
 </head>
 <body>

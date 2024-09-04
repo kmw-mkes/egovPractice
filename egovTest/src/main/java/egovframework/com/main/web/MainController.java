@@ -185,6 +185,54 @@ public class MainController {
 		mv.setViewName("jsonView");
 		return mv;
 	}
+	
+	@RequestMapping("/findPwView.do")
+	public String findPwView() {
+		return "findPwView";
+	}
+	
+	@RequestMapping("/certification.do")
+	public ModelAndView certification(@RequestParam HashMap<String, Object> paramMap) {
+		ModelAndView mv = new ModelAndView();
+		
+		int memberIdx = 0;
+		
+		memberIdx = mainService.selectMemberCertification(paramMap);
+		System.out.println(memberIdx);
+		
+		mv.addObject("memberIdx", memberIdx);
+		mv.setViewName("jsonView");
+		return mv;
+	}
+	
+	@RequestMapping("/settingPwd.do")
+	public String settingPwd(@RequestParam(name="memberIdx") int memberIdx, Model model) {
+		model.addAttribute("memberIdx", memberIdx);
+		return "settingPwd";
+	}
+	
+	@RequestMapping("/resettingPwd.do")
+	public ModelAndView resettingPwd(@RequestParam HashMap<String, Object> paramMap) {
+		ModelAndView mv = new ModelAndView();
+		
+		// 입력받은 패스워드
+		String pwd = paramMap.get("memberPw").toString();
+		// 암호화된 패스워드
+		String encryptPwd = null;
+		try {
+			encryptPwd = sha256.encrypt(pwd).toString();
+			paramMap.replace("memberPw", encryptPwd);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		int resultChk = 0;
+		resultChk = mainService.updatePwd(paramMap);
+		mv.addObject("resultChk", resultChk);
+		mv.setViewName("jsonView");
+		return mv;
+	}
 	 
 	
 }

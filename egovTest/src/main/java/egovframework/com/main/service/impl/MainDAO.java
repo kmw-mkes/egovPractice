@@ -38,4 +38,16 @@ public class MainDAO extends EgovAbstractMapper{
 		return selectList("selectFindId", paramMap);
 	}
 	
+	public int selectMemberCertification(HashMap<String, Object> paramMap) {
+		return selectOne("selectMemberCertification", paramMap);
+	}
+	
+	public int selectMemberCertificationChk(HashMap<String, Object> paramMap) {
+		return selectOne("selectMemberCertificationChk", paramMap);
+	}
+	
+	public int updatePwd(HashMap<String, Object> paramMap) {
+		return update("updatePwd", paramMap);
+	}
+	
 }
