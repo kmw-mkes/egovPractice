@@ -78,4 +78,11 @@
 		SET member_use_yn = 'N'
 		WHERE member_idx = #{memberIdx}
 	</update>
+	
+	<select id="selectFindId" parameterType="java.util.HashMap" resultType="String">
+		SELECT member_id
+		FROM tb_member
+		WHERE member_name = #{memberName}
+		AND member_email = #{memberEmail}
+	</select>
 </mapper>

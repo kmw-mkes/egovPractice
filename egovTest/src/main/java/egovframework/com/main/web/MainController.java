@@ -2,6 +2,7 @@ package egovframework.com.main.web;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -128,7 +129,7 @@ public class MainController {
 		ModelAndView mv = new ModelAndView();
 		
 		String encryptPwd = null;
-		if(paramMap.get("accountPwd") != null) {
+		if(paramMap.get("accountPwd") != null && paramMap.get("accountPwd") != "" && paramMap.get("accountPwd") != "undefined") {
 			// 입력받은 패스워드
 			String pwd = paramMap.get("accountPwd").toString();
 			try {
@@ -166,6 +167,21 @@ public class MainController {
 		resultChk = mainService.deleteMemberInfo(memberIdx);
 		
 		mv.addObject("resultChk", resultChk);
+		mv.setViewName("jsonView");
+		return mv;
+	}
+	
+	@RequestMapping("/findIdView.do")
+	public String findIdView() {
+		return "findIdView";
+	}
+	
+	@RequestMapping("/findId.do")
+	public ModelAndView findId(@RequestParam HashMap<String, Object> paramMap) {
+		ModelAndView mv = new ModelAndView();
+		
+		List<String> list = mainService.selectFindId(paramMap);
+		mv.addObject("idList", list);
 		mv.setViewName("jsonView");
 		return mv;
 	}

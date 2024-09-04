@@ -1,6 +1,7 @@
 package egovframework.com.main.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
@@ -31,6 +32,10 @@ public class MainDAO extends EgovAbstractMapper{
 	
 	public int deleteMemberInfo(int memberIdx) {
 		return update("deleteMemberInfo", memberIdx);
+	}
+	
+	public List<String> selectFindId(HashMap<String, Object> paramMap){
+		return selectList("selectFindId", paramMap);
 	}
 	
 }

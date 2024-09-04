@@ -1,6 +1,7 @@
 package egovframework.com.main.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -48,5 +49,11 @@ public class MainServiceImpl extends EgovAbstractServiceImpl implements MainServ
 	public int deleteMemberInfo(int memberIdx) {
 		// TODO Auto-generated method stub
 		return mainDAO.deleteMemberInfo(memberIdx);
+	}
+
+	@Override
+	public List<String> selectFindId(HashMap<String, Object> paramMap) {
+		// TODO Auto-generated method stub
+		return mainDAO.selectFindId(paramMap);
 	}
 }
