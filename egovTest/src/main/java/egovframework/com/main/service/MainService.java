@@ -11,4 +11,8 @@ public interface MainService {
 	public HashMap<String, Object> selectLoginInfo(HashMap<String, Object> paramMap);
 	
 	public int updateMember(HashMap<String, Object> paramMap);
+	
+	public HashMap<String, Object> selectMemberInfo(HashMap<String, Object> paramMap);
+	
+	public int deleteMemberInfo(int memberIdx);
 }

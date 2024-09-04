@@ -41,6 +41,7 @@
 		FROM tb_member
 		WHERE member_id = #{id}
 		AND member_pw = #{pwd}
+		AND member_use_yn = 'Y'
 	</select>
 	
 	<update id="updateMember" parameterType="java.util.HashMap">
@@ -51,11 +52,30 @@
 			member_email = #{accountEmail},
 			update_id = #{accountId},
 			update_date = CURRENT_TIMESTAMP()
-			<if test="pwd != null and pwd != '' and pwd != 'undefined'">
-				,member_pw = #{pwd}
+			<if test="accountPwd != null and accountPwd != '' and accountPwd != 'undefined'">
+				,member_pw = #{accountPwd}
 			</if>
 		</set>
 		where member_idx = #{memberIdx}
 		
+	</update>
+	
+	<select id="selectMemberInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  member_idx AS memberIdx,
+				member_id AS id,
+				member_name AS name,
+				member_birth AS birth,
+				member_email AS email,
+				left(member_email, locate('@', member_email)-1) AS emailId,
+				substring(member_email, locate('@', member_email)+1) AS emailAddr,
+				member_use_yn AS useYn
+		FROM tb_member
+		WHERE member_idx = #{memberIdx}
+	</select>
+	
+	<update id="deleteMemberInfo" parameterType="int">
+		UPDATE tb_member
+		SET member_use_yn = 'N'
+		WHERE member_idx = #{memberIdx}
 	</update>
 </mapper>

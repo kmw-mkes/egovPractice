@@ -128,12 +128,12 @@ public class MainController {
 		ModelAndView mv = new ModelAndView();
 		
 		String encryptPwd = null;
-		if(paramMap.get("pwd") != null) {
+		if(paramMap.get("accountPwd") != null) {
 			// 입력받은 패스워드
-			String pwd = paramMap.get("pwd").toString();
+			String pwd = paramMap.get("accountPwd").toString();
 			try {
 				encryptPwd = sha256.encrypt(pwd).toString();
-				paramMap.replace("pwd", encryptPwd);
+				paramMap.replace("accountPwd", encryptPwd);
 			} catch (NoSuchAlgorithmException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -148,5 +148,27 @@ public class MainController {
 		mv.setViewName("jsonView");
 		return mv;
 	}
+	
+	@RequestMapping("/member/getMemberInfo.do")
+	public ModelAndView getMemberInfo(@RequestParam HashMap<String, Object> paramMap) {
+		ModelAndView mv = new ModelAndView();
+		HashMap<String, Object> memberInfo = mainService.selectMemberInfo(paramMap);
+		mv.addObject("memberInfo", memberInfo);
+		mv.setViewName("jsonView");
+		return mv;
+	}
+	
+	@RequestMapping("/member/deleteMember.do")
+	public ModelAndView deleteMember(@RequestParam(name="memberIdx") int memberIdx) {
+		ModelAndView mv = new ModelAndView();
+		
+		int resultChk = 0;
+		resultChk = mainService.deleteMemberInfo(memberIdx);
+		
+		mv.addObject("resultChk", resultChk);
+		mv.setViewName("jsonView");
+		return mv;
+	}
+	 
 	
 }

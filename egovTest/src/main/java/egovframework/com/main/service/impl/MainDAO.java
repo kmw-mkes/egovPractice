@@ -25,6 +25,12 @@ public class MainDAO extends EgovAbstractMapper{
 		return update("updateMember", paramMap);
 	}
 	
+	public HashMap<String, Object> selectMemberInfo(HashMap<String, Object> paramMap){
+		return selectOne("selectMemberInfo", paramMap);
+	}
 	
+	public int deleteMemberInfo(int memberIdx) {
+		return update("deleteMemberInfo", memberIdx);
+	}
 	
 }

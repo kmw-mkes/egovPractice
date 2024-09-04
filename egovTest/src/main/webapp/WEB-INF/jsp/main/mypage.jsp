@@ -17,7 +17,7 @@
 	});
 	
 	function fn_getMemberInfo(){
-		var memberidx = "${loginInfo.memberIdx}";
+		var memberIdx = "${loginInfo.memberIdx}";
 		$.ajax({
 		    url: '/member/getMemberInfo.do',
 		    method: 'post',
@@ -26,7 +26,12 @@
 		    },
 		    dataType : 'json',
 		    success: function (data, status, xhr) {
-
+				$("#memberIdx").val(data.memberInfo.memberIdx);
+				$("#accountId").val(data.memberInfo.id);
+				$("#accountName").val(data.memberInfo.name);
+				$("#accountBirth").val(data.memberInfo.birth);
+				$("#email").val(data.memberInfo.emailId);
+				$("#emailAddr").val(data.memberInfo.emailAddr).prop("selected", true);
 		    },
 		    error: function (data, status, err) {
 		    }
@@ -66,6 +71,7 @@
 			    success: function (data, status, xhr) {
 			        if(data.resultChk > 0){
 			        	alert("수정되었습니다.");
+			        	fn_getMemberInfo();
 				        	
 			        }else{
 			        	alert("수정에 실패하였습니다.");
@@ -79,12 +85,39 @@
 		}
 	}
 	
+	function fn_delete(){
+		if(confirm("탈퇴하시겠습니까?")){
+			var memberIdx = "${loginInfo.memberIdx}";
+			$.ajax({
+			    url: '/member/deleteMember.do',
+			    method: 'post',
+			    data : {
+			    	"memberIdx" : memberIdx
+			    },
+			    dataType : 'json',
+			    success: function (data, status, xhr) {
+					if(data.resultChk > 0){
+						alert("탈퇴되었습니다.");
+						var frm = $("#frm");
+						frm.attr("method", "POST");
+						frm.attr("action", "/logout.do")
+						frm.submit();
+					}
+			    },
+			    error: function (data, status, err) {
+			    }
+			});
+		}else{
+			return;
+		}
+	}
+	
 </script>
 
 </head>
 <body>
 	<form id="frm" name="frm">
-		<input type="hidden" id="memberIdx" name="memberIdx" value="${loginInfo.memberIdx}"/>
+		<input type="hidden" id="memberIdx" name="memberIdx" value=""/>
 		<table>
 			<tr>
 				<td>
@@ -96,7 +129,7 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="text" class="text" style="width:180px;" id="accountId" name="accountId" value="${loginInfo.id}" readonly/>
+					<input type="text" class="text" style="width:180px;" id="accountId" name="accountId" value="" readonly/>
 				</td>
 			</tr>
 			<tr>
@@ -120,7 +153,7 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="text" class="text" id="accountName" name="accountName" value="${loginInfo.name }"/>
+					<input type="text" class="text" id="accountName" name="accountName" value=""/>
 				</td>
 			</tr>
 			<tr>
@@ -128,7 +161,7 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="date" class="text" id="accountBirth" name="accountBirth" value="${loginInfo.birth }"/>
+					<input type="date" class="text" id="accountBirth" name="accountBirth" value=""/>
 				</td>
 			</tr>
 			<tr>
@@ -136,7 +169,7 @@
 			</tr>
 			<tr>
 				<td>
-					<input type="text" class="email" id="email" name="email" value="${loginInfo.emailId }"> @ 
+					<input type="text" class="email" id="email" name="email" value=""> @ 
 					<select id="emailAddr" name="emailAddr">
 						<option value="">--주소를 선택해주세요--</option>
 						<option value="naver.com">naver.com</option>
@@ -150,6 +183,12 @@
 				<td>
 					<input type="button" value="저장" class="btn"
 					onclick="fn_save();">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="button" value="회원탈퇴" class="btn" style="background:red;"
+					onclick="fn_delete();">
 				</td>
 			</tr>
 		</table>
