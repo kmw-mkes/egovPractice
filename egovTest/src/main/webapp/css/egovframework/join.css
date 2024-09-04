@@ -4,14 +4,14 @@ table {
     height: 550px;
     margin: auto;      
 }
+
 .email {
     width: 127px;
     height: 32px;
     font-size: 15px;
-    border: 0;
-    border-color: lightgray;
+    border: 1;
     border-radius: 15px;
-    outline: none;
+    outline: black;
     padding-left: 10px;
     background-color: rgb(233,233,233);
 }
@@ -19,9 +19,9 @@ table {
     width: 250px;
     height: 32px;
     font-size: 15px;
-    border: 0;
+    border: 1;
     border-radius: 15px;
-    outline: none;
+    outline: black;
     padding-left: 10px;
     background-color: rgb(233,233,233);
 }

@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+.container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+    
+    /* 헤더 */
+    header {
+      height: 60px;
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+    }
+    
+    /* 본문 영역 */
+    .content {
+      /* flex-grow: 1; */
+      padding:25px;
+    }
+    
+    /* 좌측 컬럼 */
+    .left-column {
+      width: 200px;
+      background-color: #e0e0e0;
+    }
+    
+    /* 중앙 컬럼 */
+    .center-column {
+      flex-grow: 1;
+      background-color: #f5f5f5;
+    }
+    
+    /* 우측 컬럼 */
+    .right-column {
+      width: 200px;
+      background-color: #e0e0e0;
+    }
+    
+    /* 푸터 */
+    footer {
+      height: 60px;
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+    }

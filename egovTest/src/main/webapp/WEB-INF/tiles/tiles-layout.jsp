@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+    <link rel="stylesheet" href="/css/egovframework/main.css"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,9 +9,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<div id="wrap">
+	<div id="wrap" class="container">
 		<tiles:insertAttribute name="header"/>
-		<tiles:insertAttribute name="body"/>
+		<div class="content">
+			<tiles:insertAttribute name="body"/>
+		</div>
 		<tiles:insertAttribute name="footer"/>
 	</div>
 

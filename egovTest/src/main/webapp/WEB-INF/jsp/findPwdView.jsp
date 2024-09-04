@@ -13,6 +13,19 @@
 			fn_login();
 		});
 	});
+	
+	function fn_findIdView(){
+		alert("아이디 찾기");
+		// 이름, 이메일 주소로 찾기
+		return;
+	};
+	
+	function fn_findPwdView(){
+		alert("패스워드 찾기");
+		// 아이디, 이름으로 찾기
+		// 찾으면 재설정 화면으로 이동
+		return;
+	};
 
 	function fn_createAccount(){
 		var frm = $("#frm");
@@ -41,20 +54,6 @@
 		    }
 		});
 	}
-	
-	function fn_findIdView(){
-		var frm = $("#frm");
-		frm.attr("method", "POST");
-		frm.attr("action", "/findIdView.do");
-		frm.submit();
-	}
-	
-	function fn_findPwView(){
-		var frm = $("#frm");
-		frm.attr("method", "POST");
-		frm.attr("action", "/findPwView.do");
-		frm.submit();
-	}
 </script>
 </head>
 <body>
@@ -76,11 +75,11 @@
 	        <td><input type="button" value="Sign in" class="btn" id="btn_login" name="btn_login"></td>
 	    </tr>
 	    <tr>
-	        <td class="join">
-	        	<a href="javascript:fn_findIdView();">아이디찾기</a> |
-	        	<a href="javascript:fn_findPwView();">비밀번호 찾기</a> |
-	        	<a href="javascript:fn_createAccount();">회원가입</a>
-	        </td>
+	    	<td>
+	    		<a href="javascript:fn_findIdView();">아이디 찾기</a> |
+	    		<a href="javascript:fn_findPwdView();">비밀번호 찾기</a> |
+	    		<a href="javascript:fn_createAccount();">회원가입</a>
+	    	</td>
 	    </tr>
 	</table>
 </form>
