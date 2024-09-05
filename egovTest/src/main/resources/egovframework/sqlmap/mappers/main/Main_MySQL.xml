@@ -84,6 +84,7 @@
 		FROM tb_member
 		WHERE member_name = #{memberName}
 		AND member_email = #{memberEmail}
+		AND member_use_yn = 'Y'
 	</select>
 	
 	<select id="selectMemberCertification" parameterType="java.util.HashMap" resultType="int">

@@ -24,7 +24,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#btn_save").on('click', function(){
-
+			fn_save();
 		});
 		
 		$("#btn_list").on('click', function(){
@@ -34,7 +34,7 @@
 	
 	function fn_save(){
 		var frm = $("#saveFrm").serialize();
-		console.log(frm);
+		
 		$.ajax({
 		    url: '/board/saveBoard.do',
 		    method: 'post',

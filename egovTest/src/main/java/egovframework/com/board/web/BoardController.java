@@ -57,11 +57,12 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/board/registBoard.do")
-	public String registBoard(HttpSession session, Model model) {
+	public String registBoard(HttpSession session, Model model,
+			@RequestParam(name="flag") String flag) {
 		HashMap<String, Object> loginInfo = null;
 		loginInfo = (HashMap<String, Object>) session.getAttribute("loginInfo");
 		if(loginInfo != null) {
-			model.addAttribute("flag", "I");
+			model.addAttribute("flag", flag);
 			return "board/registBoard";
 		}else {
 			return "redirect:/login.do";
@@ -70,10 +71,15 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/board/saveBoard.do")
-	public ModelAndView saveBoard(@RequestParam HashMap<String, Object> paramMap, HttpSession session) {
+	public ModelAndView saveBoard(@RequestParam HashMap<String, Object> paramMap
+			, HttpSession session) {
 		ModelAndView mv = new ModelAndView();
 		int resultChk = 0;
+		
+		HashMap<String, Object> sessionInfo = (HashMap<String, Object>) session.getAttribute("loginInfo");
+		paramMap.put("memberId", sessionInfo.get("id").toString());
 
+		resultChk = boardService.saveBoard(paramMap);
 		
 		mv.addObject("resultChk", resultChk);
 		mv.setViewName("jsonView");
