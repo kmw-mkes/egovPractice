@@ -10,5 +10,7 @@ public interface BoardService {
 	public int selectBoardListCnt(HashMap<String, Object> paramMap);
 	
 	public int saveBoard(HashMap<String, Object> paramMap);
+	
+	public HashMap<String, Object> selectBoardDetail(int boardIdx);
 
 }

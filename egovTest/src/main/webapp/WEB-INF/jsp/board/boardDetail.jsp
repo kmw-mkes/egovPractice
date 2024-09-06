@@ -27,7 +27,7 @@
 		});
 		
 		$("#btn_list").on('click', function(){
-			
+			location.href="/board/boardList.do";
 		});
 	});
 	
@@ -64,33 +64,33 @@
 					<tr>
 						<th>제목</th>
 						<td colspan="3">
-							<input type="text" class="text" id="boardTitle" name="boardTitle" readonly/>
+							<input type="text" class="text" id="boardTitle" name="boardTitle" value="${boardInfo.boardTitle }" readonly/>
 						</td>
 					</tr>
 					<tr>
 						<th>내용</th>
 						<td colspan="3">
-							<textarea rows="20" cols="100" id="boardContent" name="boardContent" style="width:100%;" readonly></textarea>
+							<textarea rows="20" cols="100" id="boardContent" name="boardContent" style="width:100%;" readonly>${boardInfo.boardContent}</textarea>
 						</td>
 					</tr>
 					<tr>
 						<th>작성자</th>
 						<td>
-							<input type="text" class="text" id="createId" name="createId" value="" readonly />
+							<input type="text" class="text" id="createId" name="createId" value="${boardInfo.createId }" readonly />
 						</td>
 						<th>작성일</th>
 						<td>
-							<input type="text" class="text" id="createDate" name="createDate" value="" readonly />
+							<input type="text" class="text" id="createDate" name="createDate" value="${boardInfo.createDate }" readonly />
 						</td>
 					</tr>
 					<tr>
 						<th>수정자</th>
 						<td>
-							<input type="text"  class="text" id="updateId" name="updateId" value="" readonly />
+							<input type="text"  class="text" id="updateId" name="updateId" value="${boardInfo.updateId }" readonly />
 						</td>
 						<th>수정일</th>
 						<td>
-							<input type="text" class="text" id="updateDate" name="updateDate" value="" readonly />
+							<input type="text" class="text" id="updateDate" name="updateDate" value="${boardInfo.updateDate }" readonly />
 						</td>
 					</tr>
 				</tbody>

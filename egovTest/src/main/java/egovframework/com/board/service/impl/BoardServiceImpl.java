@@ -43,5 +43,11 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 		
 		return resultChk;
 	}
+
+	@Override
+	public HashMap<String, Object> selectBoardDetail(int boardIdx) {
+		// TODO Auto-generated method stub
+		return boardDAO.selectBoardDetail(boardIdx);
+	}
 	
 }

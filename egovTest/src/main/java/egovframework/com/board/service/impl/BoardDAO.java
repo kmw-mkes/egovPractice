@@ -25,5 +25,9 @@ public class BoardDAO extends EgovAbstractMapper{
 	public int updateBoard(HashMap<String, Object> paramMap) {
 		return update("updateBoard", paramMap);
 	}
+	
+	public HashMap<String, Object> selectBoardDetail(int boardIdx){
+		return selectOne("selectBoardDetail", boardIdx);
+	}
 
 }

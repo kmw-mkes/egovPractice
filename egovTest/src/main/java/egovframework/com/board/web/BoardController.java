@@ -37,6 +37,22 @@ public class BoardController {
 	public ModelAndView selectBoardList(@RequestParam HashMap<String, Object> paramMap) {
 		ModelAndView mv = new ModelAndView();
 		
+		PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+		paginationInfo.setRecordCountPerPage(10);
+		paginationInfo.setPageSize(10);
+		
+		paramMap.put("firstIndex", paginationInfo.getFirstRecordIndex());
+		paramMap.put("lastIndex", paginationInfo.getLastRecordIndex());
+		paramMap.put("recordCountPerPage", paginationInfo.getRecordCountPerPage());
+		
+		List<HashMap<String, Object>> list = boardService.selectBoardList(paramMap);
+		int totCnt = boardService.selectBoardListCnt(paramMap);
+		paginationInfo.setTotalRecordCount(totCnt);
+		
+		mv.addObject("list", list);
+		mv.addObject("totCnt", totCnt);
+		mv.addObject("paginationInfo", paginationInfo);
 		
 		mv.setViewName("jsonView");
 		return mv;
@@ -47,7 +63,10 @@ public class BoardController {
 		HashMap<String, Object> loginInfo = null;
 		loginInfo = (HashMap<String, Object>) session.getAttribute("loginInfo");
 		if(loginInfo != null) {
+			
+			HashMap<String, Object> boardInfo = boardService.selectBoardDetail(boardIdx);
 			model.addAttribute("boardIdx", boardIdx);
+			model.addAttribute("boardInfo", boardInfo);
 			return "board/boardDetail";
 		}else {
 			return "redirect:/login.do";

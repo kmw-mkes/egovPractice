@@ -3,11 +3,47 @@
 <mapper namespace="BoardDAO">
 
 	<select id="selectBoardList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
-		
+		SELECT  T.rnum,
+				T.boardIdx,
+		        T.boardTitle,
+		        T.createId,
+		        T.createDate,
+		        T.updateId,
+		        T.updateDate
+		FROM (select    FORMAT(@rownum:=@rownum+1, 0) AS rnum,
+						board_idx AS boardIdx,
+						board_title As boardTitle,
+						create_id AS createId,
+						DATE_FORMAT(create_date, '%Y-%m-%d %H:%i:%s') AS createDate,
+						update_id AS updateId,
+						DATE_FORMAT(update_date, '%Y-%m-%d %H:%i:%s') AS updateDate
+			from tb_board, (SELECT @rownum:=0 FROM dual) R
+			WHERE 1=1
+			<if test="searchKeyword != '' and searchKeyword != null and searchKeyword != 'undefined'">
+				<if test="searchCondition == 'id'">
+					AND create_id like concat('%',#{searchKeyword},'%')
+				</if>
+				<if test="searchCondition == 'title'">
+					AND board_title like concat('%',#{searchKeyword},'%')
+				</if>
+			</if>
+			ORDER BY create_date) T
+		ORDER BY CAST(replace(T.rnum, ',', '') AS UNSIGNED) desc
+		LIMIT #{recordCountPerPage} offset #{firstIndex}
 	</select>
 	
 	<select id="selectBoardListCnt" parameterType="java.util.HashMap" resultType="int">
-		
+		select count(board_idx)
+		from tb_board
+		WHERE 1=1
+		<if test="searchKeyword != '' and searchKeyword != null and searchKeyword != 'undefined'">
+			<if test="searchCondition == 'id'">
+				AND create_id like concat('%',#{searchKeyword}, '%')
+			</if>
+			<if test="searchCondition == 'title'">
+				AND board_title like concat('%',#{searchKeyword}, '%')
+			</if>
+		</if>
 	</select>
 	
 	<insert id="insertBoard" parameterType="java.util.HashMap">
@@ -35,5 +71,19 @@
 	<update id="updateBoard" parameterType="java.util.HashMap">
 		
 	</update>
+	
+	<select id="selectBoardDetail" parameterType="int" resultType="java.util.HashMap">
+		select      
+					board_idx AS boardIdx,
+					board_title As boardTitle,
+					board_content AS boardContent,
+					file_group_idx AS fileGroupIdx,
+					create_id AS createId,
+					DATE_FORMAT(create_date, '%Y-%m-%d %H:%i:%s') AS createDate,
+					update_id AS updateId,
+					DATE_FORMAT(update_date, '%Y-%m-%d %H:%i:%s') AS updateDate
+		from tb_board
+		WHERE board_idx = #{boardIdx}
+	</select>
 
 </mapper>
