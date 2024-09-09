@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,36 +23,59 @@
 </style>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("#btn_save").on('click', function(){
-			fn_save();
+		/* 수정 버튼 보이고 안보이고 처리방법 - 2 
+		var loginId = "${loginInfo.id}";
+		var createId = "${boardInfo.createId}";
+		if(loginId != createId){
+			$("#btn_update").hide();
+		}else{
+			$("#btn_update").show();
+		} */
+		$("#btn_update").on('click', function(){
+			$("#flag").val("U");
+			var frm = $("#saveFrm");
+			frm.attr("method", "POST");
+			frm.attr("action", "/board/registBoard.do");
+			frm.submit();
 		});
 		
 		$("#btn_list").on('click', function(){
 			location.href="/board/boardList.do";
 		});
+		
+		$("#btn_delete").on('click', function(){
+			fn_delete();
+		});
 	});
 	
-	function fn_save(){
-		var frm = $("#saveFrm").serialize();
+	function fn_delete(){
+		
+		var boardIdx3 = $("#boardIdx").val();
 		$.ajax({
-		    url: '/board/saveBoard.do',
+		    url: '/board/deleteBoard.do',
 		    method: 'post',
-		    data : frm,
+		    data : { "boardIdx" : boardIdx3},
 		    dataType : 'json',
 		    success: function (data, status, xhr) {
-		    	
+		    	if(data.resultChk > 0){
+		    		alert("삭제되었습니다.");
+		    		location.href="/board/boardList.do";
+		    	}else{
+		    		alert("삭제에 실패하였습니다.");
+		    	}
 		    },
 		    error: function (data, status, err) {
 		    	console.log(err);
 		    }
 		});
 	}
+
 </script>
 </head>
 <body>
 	<div>
 		<form id="saveFrm" name="saveFrm">
-			<input type="hidden" id="statusFlag" name="statusFlag" value="${flag}"/>
+			<input type="hidden" id="flag" name="flag" value="${flag}"/>
 			<input type="hidden" id="boardIdx" name="boardIdx" value="${boardIdx }"/>
 			<table style="height:auto; width:100%;" >
 				<colgroup>
@@ -99,7 +123,10 @@
 		</form>
 	</div>
 	<div style="float:right;">
-		<input type="button" id="btn_update" name="btn_update" value="수정"/>
+		<c:if test="${loginInfo.id == boardInfo.createId }"> <!-- 수정 버튼 보이고 안보이고 처리방법 - 1 -->
+			<input type="button" id="btn_update" name="btn_update" value="수정"/>
+			<input type="button" id="btn_delete" name="btn_delete" value="삭제"/>
+		</c:if>
 		<input type="button" id="btn_list" name="btn_list" value="목록"/>
 	</div>
 </body>

@@ -19,6 +19,7 @@
 						DATE_FORMAT(update_date, '%Y-%m-%d %H:%i:%s') AS updateDate
 			from tb_board, (SELECT @rownum:=0 FROM dual) R
 			WHERE 1=1
+			AND use_yn = 'Y'
 			<if test="searchKeyword != '' and searchKeyword != null and searchKeyword != 'undefined'">
 				<if test="searchCondition == 'id'">
 					AND create_id like concat('%',#{searchKeyword},'%')
@@ -36,6 +37,7 @@
 		select count(board_idx)
 		from tb_board
 		WHERE 1=1
+		AND use_yn = 'Y'
 		<if test="searchKeyword != '' and searchKeyword != null and searchKeyword != 'undefined'">
 			<if test="searchCondition == 'id'">
 				AND create_id like concat('%',#{searchKeyword}, '%')
@@ -69,7 +71,12 @@
 	</insert>
 	
 	<update id="updateBoard" parameterType="java.util.HashMap">
-		
+		UPDATE tb_board
+		SET board_title = #{boardTitle}
+			board_content = #{boardContent},
+			update_id = #{memberId},
+			update_date = CURRENT_TIMESTAMP()
+		WHERE board_idx = #{boardIdx}
 	</update>
 	
 	<select id="selectBoardDetail" parameterType="int" resultType="java.util.HashMap">
@@ -85,5 +92,14 @@
 		from tb_board
 		WHERE board_idx = #{boardIdx}
 	</select>
+	
+	<update id="deleteBoard" parameterType="java.util.HashMap">
+		UPDATE tb_board
+		SET use_yn ='N',
+			update_id = #{memberId},
+			update_date = CURRENT_TIMESTAMP()
+		WHERE board_idx =#{boardIdx}
+		
+	</update>
 
 </mapper>
