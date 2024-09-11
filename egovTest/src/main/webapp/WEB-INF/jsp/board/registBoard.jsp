@@ -140,7 +140,7 @@ var deleteFiles = new Array();
 			<input type="hidden" id="boardIdx" name="boardIdx" value="${boardIdx}"/>
 			<table>
 				<tr>
-					<th>제목</th>
+					<th>제목1</th>
 					<td>
 						<input type="text" class="text" id="boardTitle" name="boardTitle"/>
 					</td>
