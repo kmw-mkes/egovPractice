@@ -1,11 +1,16 @@
 package egovframework.com.board.service.impl;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import egovframework.com.board.service.BoardService;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -29,16 +34,41 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	}
 
 	@Override
-	public int saveBoard(HashMap<String, Object> paramMap) {
+	public int saveBoard(HashMap<String, Object> paramMap, List<MultipartFile> multipartFile) {
 		// TODO Auto-generated method stub
+		System.out.println(1);
 		int resultChk = 0;
 		
 		String flag = paramMap.get("statusFlag").toString();
-		
+
 		if("I".equals(flag)) {
 			resultChk = boardDAO.insertBoard(paramMap);
 		}else if("U".equals(flag)) {
 			resultChk = boardDAO.updateBoard(paramMap);
+		}
+	
+		String filePath = "/ictsaeil/egovTest";
+		
+		if(multipartFile.size() > 0 && !multipartFile.get(0).getOriginalFilename().equals("")) {
+			for(MultipartFile file : multipartFile) {
+				SimpleDateFormat date = new SimpleDateFormat("yyyyMMddHms");
+				Calendar cal = Calendar.getInstance();
+				String today = date.format(cal.getTime());
+				
+				try {
+					File fileFolder = new File(filePath);
+					if(!fileFolder.exists()) {
+						if(fileFolder.mkdirs()) {
+							System.out.println("[file.mkdirs] : Success");
+						}
+					}
+					String fileExt = FilenameUtils.getExtension(file.getOriginalFilename());
+					File saveFile = new File(filePath, "file_"+today+"."+fileExt);
+					file.transferTo(saveFile);
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		return resultChk;

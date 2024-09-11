@@ -106,6 +106,7 @@ var deleteFiles = new Array();
 		
 		for(var x=0; x<content_files.length; x++){
 			//삭제 안한 것만 담아준다.
+			console.log(content_files[x].is_delete);
 			if(!content_files[x].is_delete){
 				formData.append("fileList", content_files[x]); 
 			}
@@ -140,7 +141,7 @@ var deleteFiles = new Array();
 			<input type="hidden" id="boardIdx" name="boardIdx" value="${boardIdx}"/>
 			<table>
 				<tr>
-					<th>제목1</th>
+					<th>제목</th>
 					<td>
 						<input type="text" class="text" id="boardTitle" name="boardTitle"/>
 					</td>

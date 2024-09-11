@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.com.board.service.BoardService;
@@ -104,14 +105,15 @@ public class BoardController {
 	
 	@RequestMapping("/board/saveBoard.do")
 	public ModelAndView saveBoard(@RequestParam HashMap<String, Object> paramMap
+			,@RequestParam(name="fileList") List<MultipartFile> multipartFile
 			, HttpSession session) {
 		ModelAndView mv = new ModelAndView();
 		int resultChk = 0;
 		
 		HashMap<String, Object> sessionInfo = (HashMap<String, Object>) session.getAttribute("loginInfo");
 		paramMap.put("memberId", sessionInfo.get("id").toString());
-
-		resultChk = boardService.saveBoard(paramMap);
+		
+		resultChk = boardService.saveBoard(paramMap, multipartFile);
 		
 		mv.addObject("resultChk", resultChk);
 		mv.setViewName("jsonView");
