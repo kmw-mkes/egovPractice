@@ -65,7 +65,7 @@ var deleteFiles = new Array();
 					$("#boardFileList").append(
 								'<div id="file'+fileNum+'" style="float:left;">'
 								+'<font style="font-size:12px">' + f.name + '</font>'
-								+'<a href="javascript:fileDelete(\'file'+fileNum+'\')">X</a>'
+								+'<a href="javascript:fileDelete(\'file'+fileNum+'\',\'\')">X</a>'
 								+'</div>'
 					);
 					fileNum++;
@@ -77,9 +77,14 @@ var deleteFiles = new Array();
 		});
 	});
 	
-	function fileDelete(fileNum){
+	function fileDelete(fileNum, fileIdx){
 		var no = fileNum.replace(/[^0-9]/g, "");
-		content_files[no].is_delete = true;
+
+		if(fileIdx != ""){
+			deleteFiles.push(fileIdx);
+		}else{
+			content_files[no].is_delete = true;	
+		}
 		$("#"+fileNum).remove();
 		fileCnt--;
 	}
@@ -93,6 +98,32 @@ var deleteFiles = new Array();
 		    success: function (data, status, xhr) {
 				$("#boardTitle").val(data.boardInfo.boardTitle);
 				$("#boardContent").val(data.boardInfo.boardContent);
+				fn_filelist(data.boardInfo.fileGroupIdx);
+		    },
+		    error: function (data, status, err) {
+		    	console.log(err);
+		    }
+		});
+	}
+	
+	function fn_filelist(fileGroupIdx){
+		$.ajax({
+		    url: '/board/getFileList.do',
+		    method: 'post',
+		    data : { "fileGroupIdx" : fileGroupIdx},
+		    dataType : 'json',
+		    success: function (data, status, xhr) {
+				if(data.fileList.length > 0){
+					for(var i=0; i<data.fileList.length; i++){
+						$("#boardFileList").append(
+								'<div id="file'+i+'" style="float:left;">'
+								+'<font style="font-size:12px">' + data.fileList[i].fileOriginalName + '</font>'
+								+'<a href="javascript:fileDelete(\'file'+i+'\',\''+data.fileList[i].fileIdx+'\');">X</a>'
+								+'</div>'
+						);
+					}
+					fileNum = data.fileList.length;
+				}
 		    },
 		    error: function (data, status, err) {
 		    	console.log(err);
@@ -106,11 +137,11 @@ var deleteFiles = new Array();
 		
 		for(var x=0; x<content_files.length; x++){
 			//삭제 안한 것만 담아준다.
-			console.log(content_files[x].is_delete);
 			if(!content_files[x].is_delete){
 				formData.append("fileList", content_files[x]); 
 			}
 		}
+		formData.append("deleteFiles", deleteFiles);
 		$.ajax({
 		    url: '/board/saveBoard.do',
 		    method: 'post',

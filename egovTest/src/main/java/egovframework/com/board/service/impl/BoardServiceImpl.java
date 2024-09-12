@@ -48,7 +48,7 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 			resultChk = boardDAO.updateBoard(paramMap);
 			fileGroupIdx = boardDAO.getFileGroupIdx(paramMap);
 		}
-	
+		resultChk = boardDAO.deleteFileAttr(paramMap);
 		String filePath = "/ictsaeil/egovTest";
 		int index = 0;
 		if(multipartFile.size() > 0 && !multipartFile.get(0).getOriginalFilename().equals("")) {
@@ -108,6 +108,12 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	public List<HashMap<String, Object>> selectBoardReply(HashMap<String, Object> paramMap) {
 		// TODO Auto-generated method stub
 		return boardDAO.selectBoardReply(paramMap);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> selectFileList(int fileGroupIdx) {
+		// TODO Auto-generated method stub
+		return boardDAO.selectFileList(fileGroupIdx);
 	}
 	
 }

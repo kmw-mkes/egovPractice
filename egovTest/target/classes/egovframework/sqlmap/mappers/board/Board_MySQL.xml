@@ -72,7 +72,7 @@
 	
 	<update id="updateBoard" parameterType="java.util.HashMap">
 		UPDATE tb_board
-		SET board_title = #{boardTitle}
+		SET board_title = #{boardTitle},
 			board_content = #{boardContent},
 			update_id = #{memberId},
 			update_date = CURRENT_TIMESTAMP()
@@ -189,7 +189,7 @@
 		)
 	</insert>
 	
-	<select id="selectFileList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	<select id="selectFileList" parameterType="int" resultType="java.util.HashMap">
 		SELECT  file_idx AS fileIdx,
 				file_group_idx AS fileGroupIdx,
 				file_original_name AS fileOriginalName,
@@ -203,5 +203,12 @@
 				DATE_FORMAT(update_date, '%Y-%m-%d %H:%i:%s') AS updateDate	
 		FROM tb_file_attr
 		WHERE file_group_idx = #{fileGroupIdx}
+		AND use_yn = 'Y'
 	</select>
+	
+	<update id="deleteFileAttr" parameterType="java.util.HashMap">
+		UPDATE tb_file_attr
+		SET use_yn = 'N'
+		WHERE file_idx in (#{deleteFiles})
+	</update>
 </mapper>

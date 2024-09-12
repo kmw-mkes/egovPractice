@@ -53,5 +53,13 @@ public class BoardDAO extends EgovAbstractMapper{
 	public int insertFileAttr(HashMap<String, Object> paramMap) {
 		return insert("insertFileAttr", paramMap);
 	}
-
+	
+	public List<HashMap<String, Object>> selectFileList(int fileGroupIdx){
+		return selectList("selectFileList", fileGroupIdx);
+	}
+	
+	
+	public int deleteFileAttr(HashMap<String, Object> paramMap) {
+		return update("deleteFileAttr", paramMap);
+	}
 }

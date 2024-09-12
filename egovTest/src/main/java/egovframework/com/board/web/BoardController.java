@@ -161,5 +161,15 @@ public class BoardController {
 		mv.setViewName("jsonView");
 		return mv;
 	}
+	
+	@RequestMapping("/board/getFileList.do")
+	public ModelAndView getFileList(@RequestParam(name="fileGroupIdx") int fileGroupIdx) {
+		ModelAndView mv = new ModelAndView();
+		
+		List<HashMap<String, Object>> fileList = boardService.selectFileList(fileGroupIdx);
+		mv.addObject("fileList", fileList);
+		mv.setViewName("jsonView");
+		return mv;
+	}
 
 }
