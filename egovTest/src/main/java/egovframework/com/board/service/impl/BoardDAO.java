@@ -41,5 +41,17 @@ public class BoardDAO extends EgovAbstractMapper{
 	public List<HashMap<String, Object>> selectBoardReply(HashMap<String, Object> paramMap){
 		return selectList("selectBoardReply", paramMap);
 	}
+	
+	public int getFileGroupMaxIdx() {
+		return selectOne("getFileGroupMaxIdx");
+	}
+	
+	public int getFileGroupIdx(HashMap<String, Object> paramMap) {
+		return selectOne("getFileGroupIdx", paramMap);
+	}
+	
+	public int insertFileAttr(HashMap<String, Object> paramMap) {
+		return insert("insertFileAttr", paramMap);
+	}
 
 }

@@ -47,7 +47,7 @@
 			</if>
 		</if>
 	</select>
-	
+	<!-- 변경 -->
 	<insert id="insertBoard" parameterType="java.util.HashMap">
 		insert into tb_board(
 			board_title,
@@ -61,7 +61,7 @@
 		) values(
 			#{boardTitle},
 		    #{boardContent},
-		    null,
+		    (SELECT ifnull(MAX(A.file_group_idx), 0)+1 FROM tb_board A),
 		    #{memberId},
 		    CURRENT_TIMESTAMP(),
 		    #{memberId},
@@ -102,65 +102,106 @@
 		
 	</update>
 	
-	<insert id="insertReply" parameterType="java.util.HashMap">
-		INSERT INTO tb_reply(
-			board_idx,
-			parent_reply_idx,
-			reply_content,
-			create_id,
-			create_date,
-			update_id,
-			update_date,
-			reply_level,
-			use_yn)
-		VALUES(
-			#{boardIdx},
-			#{parentReplyIdx},
-			#{replyContent},
-			#{memberId},
-			CURRENT_TIMESTAMP(),
-			#{memberId},
-			CURRENT_TIMESTAMP(),
-			1,
-			'Y'
-		)				
-	</insert>
-	
 	<select id="selectBoardReply" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 		with recursive cte as(
-			SELECT 1 AS reply_level,
-					reply_idx,
-		            reply_content,
-		            create_id,
-		            create_date,
-		            convert(reply_idx, char) as path,
-		            parent_reply_idx
+			SELECT 1 AS reply_level, reply_idx, reply_content, create_id, create_date, convert(reply_idx, char) as path, parent_reply_idx
 		    FROM tb_reply
-		    WHERE board_idx = #{boardIdx}
-		    AND parent_reply_idx is null
-		    AND use_yn ='Y'
+		    WHERE parent_reply_idx is null
+		    AND board_idx = #{boardIdx}
+		    AND use_yn = 'Y'
 		    UNION ALL
-		    SELECT 1+cte.reply_level,
-					r.reply_idx,
-		            r.reply_content,
-		            r.create_id,
-		            r.create_date,
-		            concat(path, '-', r.reply_idx) as path,
-		            r.parent_reply_idx
-		    FROM tb_reply AS r
-		    inner join cte 
-		    on r.parent_reply_idx = cte.reply_idx
+		    SELECT 1+cte.reply_level, r.reply_idx, r.reply_content, r.create_id, r.create_date, 
+		    		co
+		    		ncat(path, '-', r.reply_idx) as path, r.parent_reply_idx
+		    FROM tb_reply r
+		    inner join cte on r.parent_reply_idx = cte.reply_idx
 		    WHERE r.board_idx = #{boardIdx}
 		    AND r.use_yn = 'Y'
 		)
-		select reply_idx AS replyIdx,
+		SELECT  reply_idx AS replyIdx,
 				reply_content AS replyContent,
-		        create_id AS createId,
+		        create_id AS createId, 
 		        DATE_FORMAT(create_date, '%Y-%m-%d %H:%i:%s') AS createDate,
 		        reply_level-1 AS replyLevel,
 		        path,
 		        parent_reply_idx AS parentReplyIdx
-		from cte
-		order by convert(substring_index(path, '-', 1), unsigned) desc, path
-	</select> 
+		FROM cte
+		ORDER BY convert(substring_index(path, '-',1), UNSIGNED) desc, path
+	</select>
+	
+	<insert id="insertReply" parameterType="java.util.HashMap">
+		INSERT INTO tb_reply(
+			board_idx,
+		    parent_reply_idx,
+		    reply_content,
+		    create_id,
+		    create_date,
+		    update_id,
+		    update_date,
+		    reply_level,
+		    use_yn
+		) VALUES (
+			#{boardIdx},
+		    #{replyIdx},
+		    #{replyContent},
+		    #{memberId},
+		    current_timestamp(),
+		    #{memberId},
+		    current_timestamp(),
+		    1,
+		    'Y'
+		)
+	</insert>
+	
+	<select id="getFileGroupMaxIdx" resultType="int">
+		SELECT ifnull(MAX(file_group_idx), 0) FROM tb_board
+	</select>
+	
+	<select id="getFileGroupIdx" parameterType="java.util.HashMap" resultType="int">
+		SELECT file_group_idx
+		FROM tb_board
+		WHERE board_idx = #{boardIdx}
+	</select>
+	
+	<insert id="insertFileAttr" parameterType="java.util.HashMap">
+		INSERT INTO tb_file_attr(
+			file_group_idx,
+			file_original_name,
+			save_file_name,
+			save_file_path,
+			file_size,
+			file_ext,
+			create_id,
+			create_date,
+			update_id,
+			update_date		
+		) VALUES(
+			#{fileGroupIdx},
+			#{originalFileName},
+			#{saveFileName},
+			#{saveFilePath},
+			#{fileSize},
+			#{fileExt},
+			#{memberId},
+			CURRENT_TIMESTAMP(),
+			#{memberId},
+			CURRENT_TIMESTAMP()
+		)
+	</insert>
+	
+	<select id="selectFileList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  file_idx AS fileIdx,
+				file_group_idx AS fileGroupIdx,
+				file_original_name AS fileOriginalName,
+				save_file_name AS saveFileName,
+				save_file_path AS saveFilePath,
+				file_size AS fileSize,
+				file_ext AS fileExt,
+				create_id AS createId,
+				DATE_FORMAT(create_date, '%Y-%m-%d %H:%i:%s') AS createDate,
+				update_id AS updateId,
+				DATE_FORMAT(update_date, '%Y-%m-%d %H:%i:%s') AS updateDate	
+		FROM tb_file_attr
+		WHERE file_group_idx = #{fileGroupIdx}
+	</select>
 </mapper>

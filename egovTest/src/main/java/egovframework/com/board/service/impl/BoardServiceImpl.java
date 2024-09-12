@@ -40,15 +40,17 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 		int resultChk = 0;
 		
 		String flag = paramMap.get("statusFlag").toString();
-
+		int fileGroupIdx = 0;
 		if("I".equals(flag)) {
 			resultChk = boardDAO.insertBoard(paramMap);
+			fileGroupIdx = boardDAO.getFileGroupMaxIdx();
 		}else if("U".equals(flag)) {
 			resultChk = boardDAO.updateBoard(paramMap);
+			fileGroupIdx = boardDAO.getFileGroupIdx(paramMap);
 		}
 	
 		String filePath = "/ictsaeil/egovTest";
-		
+		int index = 0;
 		if(multipartFile.size() > 0 && !multipartFile.get(0).getOriginalFilename().equals("")) {
 			for(MultipartFile file : multipartFile) {
 				SimpleDateFormat date = new SimpleDateFormat("yyyyMMddHms");
@@ -63,8 +65,18 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 						}
 					}
 					String fileExt = FilenameUtils.getExtension(file.getOriginalFilename());
-					File saveFile = new File(filePath, "file_"+today+"."+fileExt);
+					File saveFile = new File(filePath, "file_"+today+"_"+index+"."+fileExt);
 					file.transferTo(saveFile);
+					HashMap<String, Object> uploadFile = new HashMap<String, Object>();
+					uploadFile.put("fileGroupIdx", fileGroupIdx);
+					uploadFile.put("originalFileName", file.getOriginalFilename());
+					uploadFile.put("saveFileName", "file_"+today+"_"+index+"."+fileExt);
+					uploadFile.put("saveFilePath", filePath);
+					uploadFile.put("fileSize", file.getSize());
+					uploadFile.put("fileExt", fileExt);
+					uploadFile.put("memberId", paramMap.get("memberId").toString());
+					resultChk = boardDAO.insertFileAttr(uploadFile);
+					index++;
 				}catch(Exception e) {
 					e.printStackTrace();
 				}
