@@ -47,8 +47,12 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 		}else if("U".equals(flag)) {
 			resultChk = boardDAO.updateBoard(paramMap);
 			fileGroupIdx = boardDAO.getFileGroupIdx(paramMap);
+			
+			if(paramMap.get("deleteFiles") != null) {
+				resultChk = boardDAO.deleteFileAttr(paramMap);
+			}
 		}
-		resultChk = boardDAO.deleteFileAttr(paramMap);
+		
 		String filePath = "/ictsaeil/egovTest";
 		int index = 0;
 		if(multipartFile.size() > 0 && !multipartFile.get(0).getOriginalFilename().equals("")) {

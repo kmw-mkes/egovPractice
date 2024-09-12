@@ -209,6 +209,6 @@
 	<update id="deleteFileAttr" parameterType="java.util.HashMap">
 		UPDATE tb_file_attr
 		SET use_yn = 'N'
-		WHERE file_idx in (#{deleteFiles})
+		WHERE file_idx in (${deleteFiles})
 	</update>
 </mapper>

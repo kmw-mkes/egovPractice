@@ -141,7 +141,10 @@ var deleteFiles = new Array();
 				formData.append("fileList", content_files[x]); 
 			}
 		}
-		formData.append("deleteFiles", deleteFiles);
+		if(deleteFiles.length >0){
+			formData.append("deleteFiles", deleteFiles);	
+		}
+		
 		$.ajax({
 		    url: '/board/saveBoard.do',
 		    method: 'post',
